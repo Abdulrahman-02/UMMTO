@@ -1,0 +1,69 @@
+======================================
+fork() 
+
+duplication des processus avec int fork(void)
+
+Cette fonction permet la création dynamique d'un nouveau processus qui s'exécute de
+façon concurrente avec le processus qui l'a créé.
+
+Un appel à fork () par un processus, appelé processus-père, demande à UNIX de mettre
+en activité un nouveau processus (appelé processus-fils) qui est une copie conforme du
+processus courant, pour la plupart de ses attributs. 
+
+-1  =  echec
+0   =  processus fils
+PID =  pour le père
+
+processus sont exactement identique
+
+Un processus fils hérite de la plupart des attributs de son père, à l'exception de :
+- son PID, qui est unique et attribué par le système d'exploitation,
+- le PID de son père,
+- ses temps d'exécution initialisés à la valeur nulle,
+- les signaux en attente de traitement,
+- la priorité initialisée à une valeur standard,
+- les verrous sur les fichiers.
+============================================
+exit()
+
+void exit (int status)
+
+mis fin au processus qui l'a emis avec un code de retour status
+code 0 === processus s'est terminé correctement
+code non null (1 gnrlm) === erreur est produite
+=============================================
+wait()
+#include <sys/types.h>
+#include <sys/wait.h>
+int wait (int * terminaison)
+
+fils se termine et le père ne l'attend pas le fils passe a l'etat  defunct (zombie)
+avec cette instruction ::
+père bloque en attente de la fin de fils
+rendera le n PID de premier fils mort trouvé
+valeur de code de sortie est relié au paramètre exit    
+
+on peut utiliser wait pour connetre la valeur de retour fournie par exit()
+processus exécute wait est endormi jusqua la terminaison de l'un de ses fils
+wait renvoie le pid du fils qui vient de mourir
+==============================================
+execl()
+argument :: ref == chemin absolus de nv programme
+            args == args du programme
+            arg0 == nom de programme
+
+==============================================
+read()
+the read() function reads cnt bytes of input into the memory area indicated by buf.
+A successful read() updates the access time for the file.
+
+size_t read (int fd, void* buf, size_t cnt);
+
+args::
+        fd: file descriptor
+        buf: buffer to read data from
+        cnt: length of buffer
+
+results
+        0 == reach end of file
+        -1 == error or signal interrupt
